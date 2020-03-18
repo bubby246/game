@@ -1,0 +1,100 @@
+buildscript {
+
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+//        google()
+		maven {
+			url 'https://maven.google.com/'
+			name 'Google'
+		}
+		google()
+	}
+    dependencies {
+		classpath 'com.android.tools.build:gradle:3.5.1'
+    }
+}
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+allprojects {
+    apply plugin: "eclipse"
+    apply plugin: "idea"
+
+    version = '1.0'
+    ext {
+        appName = "Track Shooter"
+        gdxVersion = '1.9.9'
+        roboVMVersion = '2.3.3'
+        box2DLightsVersion = '1.4'
+        ashleyVersion = '1.7.0'
+        aiVersion = '1.8.0'
+        controllerLibVersion = "v2.2.4"
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+
+        jcenter()
+
+        maven { url "https://jitpack.io" }
+		maven {
+			url 'https://maven.google.com/'
+			name 'Google'
+		}
+	}
+
+}
+
+
+project(":desktop") {
+    apply plugin: "java"
+
+
+    dependencies {
+        implementation project(":core")
+        implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+//        implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+		implementation "com.badlogicgames.gdx:gdx-controllers-lwjgl3:$gdxVersion"
+
+    }
+}
+
+//project(":android") {
+//}
+
+//project(":html") {
+//}
+project(":packer"){
+	apply plugin: "java"
+
+	dependencies {
+		implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+		implementation "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+	}
+}
+
+project(":core") {
+    apply plugin: "java"
+
+
+    dependencies {
+        implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+//        implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+        implementation "com.github.retrodaredevil.abstract-controller-lib:api:$controllerLibVersion"
+        implementation "com.github.retrodaredevil.abstract-controller-lib:gdx:$controllerLibVersion"
+
+    }
+}
+
+tasks.eclipse.doLast {
+    delete ".project"
+}
